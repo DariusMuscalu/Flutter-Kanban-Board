@@ -34,7 +34,6 @@ class BoardList extends StatefulWidget {
   final int? index;
 
   const BoardList({
-    Key? key,
     this.header,
     this.items,
     this.footer,
@@ -46,6 +45,7 @@ class BoardList extends StatefulWidget {
     this.onDropList,
     this.onTapList,
     this.onStartDragList,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -57,13 +57,18 @@ class BoardList extends StatefulWidget {
 class BoardListState extends State<BoardList>
     with AutomaticKeepAliveClientMixin {
   List<BoardItemState> itemStates = [];
-  ScrollController boardListController = new ScrollController();
+
+  ScrollController boardListController = ScrollController();
 
   void onDropList(int? listIndex) {
     if (widget.onDropList != null) {
-      widget.onDropList!(listIndex, widget.boardView!.startListIndex);
+      widget.onDropList!(
+        listIndex,
+        widget.boardView!.startListIndex,
+      );
     }
     widget.boardView!.draggedListIndex = null;
+
     if (widget.boardView!.mounted) {
       widget.boardView!.setState(() {});
     }
@@ -74,6 +79,7 @@ class BoardListState extends State<BoardList>
       if (widget.onStartDragList != null) {
         widget.onStartDragList!(widget.index);
       }
+
       widget.boardView!.startListIndex = widget.index;
       widget.boardView!.height = context.size!.height;
       widget.boardView!.draggedListIndex = widget.index!;
@@ -81,6 +87,7 @@ class BoardListState extends State<BoardList>
       widget.boardView!.draggedItem = item;
       widget.boardView!.onDropList = onDropList;
       widget.boardView!.run();
+
       if (widget.boardView!.mounted) {
         widget.boardView!.setState(() {});
       }
@@ -133,9 +140,10 @@ class BoardListState extends State<BoardList>
           child: Container(
             color: widget.headerBackgroundColor,
             child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: widget.header!),
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: widget.header!,
+            ),
           ),
         ),
       );
@@ -157,7 +165,7 @@ class BoardListState extends State<BoardList>
                     widget.items![index].boardList!.widget.index !=
                         widget.index ||
                     widget.items![index].boardList != this) {
-                  widget.items![index] = new BoardItem(
+                  widget.items![index] = BoardItem(
                     boardList: this,
                     item: widget.items![index].item,
                     draggable: widget.items![index].draggable,
@@ -168,6 +176,7 @@ class BoardListState extends State<BoardList>
                     onStartDragItem: widget.items![index].onStartDragItem,
                   );
                 }
+
                 if (widget.boardView!.draggedItemIndex == index &&
                     widget.boardView!.draggedListIndex == widget.index) {
                   return Opacity(

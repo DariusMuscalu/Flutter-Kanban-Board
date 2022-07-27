@@ -41,7 +41,6 @@ class BoardItem extends StatefulWidget {
   final bool draggable;
 
   const BoardItem({
-    Key? key,
     this.boardList,
     this.item,
     this.index,
@@ -50,6 +49,7 @@ class BoardItem extends StatefulWidget {
     this.onStartDragItem,
     this.draggable = true,
     this.onDragItem,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -104,7 +104,10 @@ class BoardItemState extends State<BoardItem>
 
       if (widget.onStartDragItem != null) {
         widget.onStartDragItem!(
-            widget.boardList!.widget.index, widget.index, this);
+          widget.boardList!.widget.index,
+          widget.index,
+          this,
+        );
       }
 
       widget.boardList!.widget.boardView!.run();
@@ -141,9 +144,11 @@ class BoardItemState extends State<BoardItem>
         if (widget.draggable) {
           RenderBox object = context.findRenderObject() as RenderBox;
           Offset pos = object.localToGlobal(Offset.zero);
+
           RenderBox box =
               widget.boardList!.context.findRenderObject() as RenderBox;
           Offset listPos = box.localToGlobal(Offset.zero);
+
           widget.boardList!.widget.boardView!.leftListX = listPos.dx;
           widget.boardList!.widget.boardView!.topListY = listPos.dy;
           widget.boardList!.widget.boardView!.topItemY = pos.dy;
@@ -175,7 +180,10 @@ class BoardItemState extends State<BoardItem>
       onLongPress: () {
         if (!widget.boardList!.widget.boardView!.widget.isSelecting &&
             widget.draggable) {
-          _startDrag(widget, context);
+          _startDrag(
+            widget,
+            context,
+          );
         }
       },
 
