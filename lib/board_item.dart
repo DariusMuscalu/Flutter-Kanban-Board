@@ -34,11 +34,13 @@ class BoardItem extends StatefulWidget {
   final BoardListState? boardList;
   final Widget? item;
   final int? index;
+  final bool draggable;
+
+  // Callbacks
   final OnDropItem? onDropItem;
   final OnTapItem? onTapItem;
   final OnStartDragItem? onStartDragItem;
   final OnDragItem? onDragItem;
-  final bool draggable;
 
   const BoardItem({
     this.boardList,
@@ -65,65 +67,6 @@ class BoardItemState extends State<BoardItem>
 
   @override
   bool get wantKeepAlive => true;
-
-  void onDropItem(int? listIndex, int? itemIndex) {
-    if (widget.onDropItem != null) {
-      widget.onDropItem!(
-        listIndex,
-        itemIndex,
-        widget.boardList!.widget.boardView!.startListIndex,
-        widget.boardList!.widget.boardView!.startItemIndex,
-        this,
-      );
-    }
-    widget.boardList!.widget.boardView!.draggedItemIndex = null;
-    widget.boardList!.widget.boardView!.draggedListIndex = null;
-    if (widget.boardList!.widget.boardView!.listStates[listIndex!].mounted) {
-      widget.boardList!.widget.boardView!.listStates[listIndex].setState(
-        () {},
-      );
-    }
-  }
-
-  void _startDrag(Widget item, BuildContext context) {
-    if (widget.boardList!.widget.boardView != null) {
-      widget.boardList!.widget.boardView!.onDropItem = onDropItem;
-
-      if (widget.boardList!.mounted) {
-        widget.boardList!.setState(() {});
-      }
-
-      widget.boardList!.widget.boardView!.draggedItemIndex = widget.index;
-      widget.boardList!.widget.boardView!.height = context.size!.height;
-      widget.boardList!.widget.boardView!.draggedListIndex =
-          widget.boardList!.widget.index;
-      widget.boardList!.widget.boardView!.startListIndex =
-          widget.boardList!.widget.index;
-      widget.boardList!.widget.boardView!.startItemIndex = widget.index;
-      widget.boardList!.widget.boardView!.draggedItem = item;
-
-      if (widget.onStartDragItem != null) {
-        widget.onStartDragItem!(
-          widget.boardList!.widget.index,
-          widget.index,
-          this,
-        );
-      }
-
-      widget.boardList!.widget.boardView!.run();
-
-      if (widget.boardList!.widget.boardView!.mounted) {
-        widget.boardList!.widget.boardView!.setState(() {});
-      }
-    }
-  }
-
-  void afterFirstLayout(BuildContext context) {
-    try {
-      height = context.size!.height;
-      width = context.size!.width;
-    } catch (e) {}
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,5 +132,75 @@ class BoardItemState extends State<BoardItem>
 
       child: widget.item,
     );
+  }
+
+  void onDropItem(
+    int? listIndex,
+    int? itemIndex,
+  ) {
+    if (widget.onDropItem != null) {
+      widget.onDropItem!(
+        listIndex,
+        itemIndex,
+        widget.boardList!.widget.boardView!.startListIndex,
+        widget.boardList!.widget.boardView!.startItemIndex,
+        this,
+      );
+    }
+
+    widget.boardList!.widget.boardView!.draggedItemIndex = null;
+    widget.boardList!.widget.boardView!.draggedListIndex = null;
+
+    if (widget.boardList!.widget.boardView!.listStates[listIndex!].mounted) {
+      widget.boardList!.widget.boardView!.listStates[listIndex].setState(() {});
+    }
+  }
+
+  void _startDrag(
+    Widget item,
+    BuildContext context,
+  ) {
+    if (widget.boardList!.widget.boardView != null) {
+      widget.boardList!.widget.boardView!.onDropItem = onDropItem;
+
+      if (widget.boardList!.mounted) {
+        widget.boardList!.setState(() {});
+      }
+
+      widget.boardList!.widget.boardView!.draggedItemIndex = widget.index;
+
+      widget.boardList!.widget.boardView!.height = context.size!.height;
+
+      widget.boardList!.widget.boardView!.draggedListIndex =
+          widget.boardList!.widget.index;
+
+      widget.boardList!.widget.boardView!.startListIndex =
+          widget.boardList!.widget.index;
+
+      widget.boardList!.widget.boardView!.startItemIndex = widget.index;
+
+      widget.boardList!.widget.boardView!.draggedItem = item;
+
+      if (widget.onStartDragItem != null) {
+        widget.onStartDragItem!(
+          widget.boardList!.widget.index,
+          widget.index,
+          this,
+        );
+      }
+
+      widget.boardList!.widget.boardView!.run();
+
+      if (widget.boardList!.widget.boardView!.mounted) {
+        widget.boardList!.widget.boardView!.setState(() {});
+      }
+    }
+  }
+
+  void afterFirstLayout(BuildContext context) {
+    try {
+      height = context.size!.height;
+      width = context.size!.width;
+    } catch (e) {}
   }
 }

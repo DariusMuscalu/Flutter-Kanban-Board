@@ -5,6 +5,7 @@ class ScrollbarStyle {
   double thickness;
   Radius radius;
   Color color;
+
   ScrollbarStyle({
     this.radius = const Radius.circular(10),
     this.hoverThickness = 10,

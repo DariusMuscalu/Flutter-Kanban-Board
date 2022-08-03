@@ -1,33 +1,22 @@
-[![pub package](https://img.shields.io/pub/v/boardview.svg)](https://pub.dev/packages/boardview)
+Code conventions:
 
-# Flutter BoardView
-This is a custom widget that can create a draggable BoardView or also known as a kanban. The view can be reordered with drag and drop.
+# What's commented with /// are my comments, so I can understand what's going on in the codebase.
 
-## Installation
-Just add ``` boardview ``` to the ``` pubspec.yaml ``` file.
+Not sure about yet CODE CONVENTIONS:
+ - 
+- Temp in variable names might mean TEMPORARY 
 
-## Usage Example
+Classes Explained:
 
-To get started you can look inside the ``` /example``` folder. This package is broken into 3 core parts
+# BoardView
+Board view is the content which contains the lists with their items inside them and is the place where you can see the
+dragged item, if trying to drag the item outside the board view, it doesn't show, it is only visible inside the board view.
 
+# BoardViewController
+By far I know that the boardview-controller is used to animate something, idk what exactly, and how it is used.
+
+# App example
 ![Example](https://github.com/jakebonk/FlutterBoardView/blob/master/images/example.gif?raw=true)
-
-### BoardView
-
-The BoardView class takes in a List of BoardLists. It can also take in a BoardViewController which is can be used to animate to positions in the BoardView
-
-``` dart
-
-BoardViewController boardViewController = new BoardViewController();
-
-List<BoardList> _lists = List<BoardList>();
-
-BoardView(
-  lists: _lists,
-  boardViewController: boardViewController,
-);
-
-```
 
 ### BoardList
 

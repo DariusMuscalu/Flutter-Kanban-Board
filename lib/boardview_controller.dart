@@ -4,8 +4,6 @@ import 'boardview.dart';
 
 /// THIS IS USED FOR SOME KIND OF ANIMATION, THAT'S ALL I KNOW AT THIS MOMENT
 class BoardViewController {
-  BoardViewController();
-
   late BoardViewState state;
 
   Future<void> animateTo(

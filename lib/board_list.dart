@@ -25,6 +25,8 @@ class BoardList extends StatefulWidget {
   final Color? headerBackgroundColor;
 
   final BoardViewState? boardView;
+
+  // Callbacks
   final OnDropList? onDropList;
   final OnTapList? onTapList;
   final OnStartDragList? onStartDragList;
@@ -58,48 +60,16 @@ class BoardListState extends State<BoardList>
     with AutomaticKeepAliveClientMixin {
   List<BoardItemState> itemStates = [];
 
-  ScrollController boardListController = ScrollController();
+  ScrollController boardListScrollController = ScrollController();
 
-  void onDropList(int? listIndex) {
-    if (widget.onDropList != null) {
-      widget.onDropList!(
-        listIndex,
-        widget.boardView!.startListIndex,
-      );
-    }
-    widget.boardView!.draggedListIndex = null;
-
-    if (widget.boardView!.mounted) {
-      widget.boardView!.setState(() {});
-    }
-  }
-
-  void _startDrag(Widget item, BuildContext context) {
-    if (widget.boardView != null && widget.isDraggable) {
-      if (widget.onStartDragList != null) {
-        widget.onStartDragList!(widget.index);
-      }
-
-      widget.boardView!.startListIndex = widget.index;
-      widget.boardView!.height = context.size!.height;
-      widget.boardView!.draggedListIndex = widget.index!;
-      widget.boardView!.draggedItemIndex = null;
-      widget.boardView!.draggedItem = item;
-      widget.boardView!.onDropList = onDropList;
-      widget.boardView!.run();
-
-      if (widget.boardView!.mounted) {
-        widget.boardView!.setState(() {});
-      }
-    }
-  }
-
+  // TODO: Understand what this does
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> listWidgets = [];
+    Color? _backgroundColor = Color.fromARGB(255, 255, 255, 255);
 
     if (widget.header != null) {
       Color? headerBackgroundColor = Color.fromARGB(255, 255, 255, 255);
@@ -157,7 +127,7 @@ class BoardListState extends State<BoardList>
             child: ListView.builder(
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
-              controller: boardListController,
+              controller: boardListScrollController,
               itemCount: widget.items!.length,
               itemBuilder: (ctx, index) {
                 if (widget.items![index].boardList == null ||
@@ -197,26 +167,70 @@ class BoardListState extends State<BoardList>
       listWidgets.add(widget.footer!);
     }
 
-    Color? backgroundColor = Color.fromARGB(255, 255, 255, 255);
-
     if (widget.backgroundColor != null) {
-      backgroundColor = widget.backgroundColor;
+      _backgroundColor = widget.backgroundColor;
     }
 
     if (widget.boardView!.listStates.length > widget.index!) {
       widget.boardView!.listStates.removeAt(widget.index!);
     }
 
-    widget.boardView!.listStates.insert(widget.index!, this);
+    widget.boardView!.listStates.insert(
+      widget.index!,
+      this,
+    );
 
+    /// Layout details.
+    /// (!)  Not sure about it yet:
+    /// This is the container that holds the items inside a list
     return Container(
+      // Change this to understand what it is while watching the live example modifying
+      height: 300,
       margin: EdgeInsets.all(8),
-      decoration: BoxDecoration(color: backgroundColor),
+      decoration: BoxDecoration(color: _backgroundColor),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: listWidgets,
       ),
     );
+  }
+
+  void onDropList(int? listIndex) {
+    if (widget.onDropList != null) {
+      widget.onDropList!(
+        listIndex,
+        widget.boardView!.startListIndex,
+      );
+    }
+
+    widget.boardView!.draggedListIndex = null;
+
+    if (widget.boardView!.mounted) {
+      widget.boardView!.setState(() {});
+    }
+  }
+
+  void _startDrag(
+    Widget item,
+    BuildContext context,
+  ) {
+    if (widget.boardView != null && widget.isDraggable) {
+      if (widget.onStartDragList != null) {
+        widget.onStartDragList!(widget.index);
+      }
+
+      widget.boardView!.startListIndex = widget.index;
+      widget.boardView!.height = context.size!.height;
+      widget.boardView!.draggedListIndex = widget.index!;
+      widget.boardView!.draggedItemIndex = null;
+      widget.boardView!.draggedItem = item;
+      widget.boardView!.onDropList = onDropList;
+      widget.boardView!.run();
+
+      if (widget.boardView!.mounted) {
+        widget.boardView!.setState(() {});
+      }
+    }
   }
 }
