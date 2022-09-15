@@ -1,4 +1,4 @@
-import 'package:boardview/board_list.dart';
+import 'package:boardview/board-list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -55,34 +55,30 @@ class BoardItem extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return BoardItemState();
-  }
+  State<StatefulWidget> createState() => BoardItemState();
 }
 
-class BoardItemState extends State<BoardItem>
-    with AutomaticKeepAliveClientMixin {
+class BoardItemState extends State<BoardItem> {
   late double height;
   double? width;
 
   @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance
-        .addPostFrameCallback((_) => afterFirstLayout(context));
+        .addPostFrameCallback((_) => _afterFirstLayout(context));
 
-    if (widget.boardList!.itemStates.length > widget.index!) {
-      widget.boardList!.itemStates.removeAt(widget.index!);
+    if (widget.boardList!.boardItemStates.length > widget.index!) {
+      widget.boardList!.boardItemStates.removeAt(widget.index!);
     }
 
-    widget.boardList!.itemStates.insert(
+    widget.boardList!.boardItemStates.insert(
       widget.index!,
       this,
     );
 
     return GestureDetector(
+      child: widget.item,
+
       onTapDown: (otd) {
         if (widget.draggable) {
           RenderBox object = context.findRenderObject() as RenderBox;
@@ -129,15 +125,10 @@ class BoardItemState extends State<BoardItem>
           );
         }
       },
-
-      child: widget.item,
     );
   }
 
-  void onDropItem(
-    int? listIndex,
-    int? itemIndex,
-  ) {
+  void _onDropItem(int? listIndex, int? itemIndex) {
     if (widget.onDropItem != null) {
       widget.onDropItem!(
         listIndex,
@@ -156,12 +147,9 @@ class BoardItemState extends State<BoardItem>
     }
   }
 
-  void _startDrag(
-    Widget item,
-    BuildContext context,
-  ) {
+  void _startDrag(Widget item, BuildContext context) {
     if (widget.boardList!.widget.boardView != null) {
-      widget.boardList!.widget.boardView!.onDropItem = onDropItem;
+      widget.boardList!.widget.boardView!.onDropItem = _onDropItem;
 
       if (widget.boardList!.mounted) {
         widget.boardList!.setState(() {});
@@ -197,7 +185,9 @@ class BoardItemState extends State<BoardItem>
     }
   }
 
-  void afterFirstLayout(BuildContext context) {
+  /// (!) DON'T DELETE
+  /// IT FIXES AN RED SCREEN ERROR WHILE DRAGGING AN ITEM, DO FURTHER RESEARCH
+  void _afterFirstLayout(BuildContext context) {
     try {
       height = context.size!.height;
       width = context.size!.width;

@@ -1,6 +1,5 @@
+import 'package:boardview/boardview.dart';
 import 'package:flutter/animation.dart';
-
-import 'boardview.dart';
 
 /// THIS IS USED FOR SOME KIND OF ANIMATION, THAT'S ALL I KNOW AT THIS MOMENT
 class BoardViewController {
@@ -13,8 +12,8 @@ class BoardViewController {
   }) async {
     double offset = index * state.widget.width;
 
-    if (state.scrollController.hasClients) {
-      await state.scrollController.animateTo(
+    if (state.boardViewScrollController.hasClients) {
+      await state.boardViewScrollController.animateTo(
         offset,
         duration: duration!,
         curve: curve!,

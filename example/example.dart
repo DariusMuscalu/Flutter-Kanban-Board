@@ -1,8 +1,8 @@
-import 'package:boardview/board_item.dart';
-import 'package:boardview/board_list.dart';
-import 'package:boardview/boardview_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:boardview/board-item.dart';
+import 'package:boardview/board-list.dart';
+import 'package:boardview/boardview-controller.dart';
 import 'package:boardview/boardview.dart';
+import 'package:flutter/material.dart';
 
 import 'BoardItemObject.dart';
 import 'BoardListObject.dart';
@@ -12,7 +12,8 @@ class BoardViewExample extends StatelessWidget {
   List<BoardListObject> _listData = [
     BoardListObject(title: "List title 1"),
     BoardListObject(title: "List title 2"),
-    BoardListObject(title: "List title 3")
+    BoardListObject(title: "List title 3"),
+    BoardListObject(title: "List title 4"),
   ];
 
   // Can be used to animate to different sections of the BoardView
@@ -31,39 +32,37 @@ class BoardViewExample extends StatelessWidget {
     );
   }
 
-  Widget buildBoardItem(BoardItemObject itemObject) {
-    return BoardItem(
-      onStartDragItem: (
-        int? listIndex,
-        int? itemIndex,
-        BoardItemState? state,
-      ) {},
-      onDropItem: (
-        int? listIndex,
-        int? itemIndex,
-        int? oldListIndex,
-        int? oldItemIndex,
-        BoardItemState? state,
-      ) {
-        //Used to update our local item data
-        var item = _listData[oldListIndex!].items![oldItemIndex!];
-        _listData[oldListIndex].items!.removeAt(oldItemIndex);
-        _listData[listIndex!].items!.insert(itemIndex!, item);
-      },
-      onTapItem: (
-        int? listIndex,
-        int? itemIndex,
-        BoardItemState? state,
-      ) async {},
-      item: Card(
-        color: Colors.red,
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(itemObject.title!),
+  Widget buildBoardItem(BoardItemObject itemObject) => BoardItem(
+        onStartDragItem: (
+          int? listIndex,
+          int? itemIndex,
+          BoardItemState? state,
+        ) {},
+        onDropItem: (
+          int? listIndex,
+          int? itemIndex,
+          int? oldListIndex,
+          int? oldItemIndex,
+          BoardItemState? state,
+        ) {
+          //Used to update our local item data
+          var item = _listData[oldListIndex!].items![oldItemIndex!];
+          _listData[oldListIndex].items!.removeAt(oldItemIndex);
+          _listData[listIndex!].items!.insert(itemIndex!, item);
+        },
+        onTapItem: (
+          int? listIndex,
+          int? itemIndex,
+          BoardItemState? state,
+        ) async {},
+        item: Card(
+          color: Colors.red,
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(itemObject.title!),
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   Widget _createBoardList(BoardListObject list) {
     /// Each column list contains this list of items
