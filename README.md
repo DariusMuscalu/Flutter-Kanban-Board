@@ -1,13 +1,3 @@
-Code conventions:
-
-# What's commented with /// are my comments, so I can understand what's going on in the codebase.
-
-Not sure about yet CODE CONVENTIONS:
- - 
-- Temp in variable names might mean TEMPORARY 
-
-Classes Explained:
-
 # BoardView
 Board view is the content which contains the lists with their items inside them and is the place where you can see the
 dragged item, if trying to drag the item outside the board view, it doesn't show, it is only visible inside the board view.
