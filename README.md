@@ -1,9 +1,11 @@
+# Project is still in progress, not finished!
+
 # BoardView
 Board view is the content which contains the lists with their items inside them and is the place where you can see the
 dragged item, if trying to drag the item outside the board view, it doesn't show, it is only visible inside the board view.
 
 # BoardViewController
-By far I know that the boardview-controller is used to animate something, idk what exactly, and how it is used.
+boardview-controller is used for the animation.
 
 # App example
 ![Example](https://github.com/jakebonk/FlutterBoardView/blob/master/images/example.gif?raw=true)
