@@ -1,5 +1,3 @@
-# Project is still in progress, not finished!
-
 # BoardView
 Board view is the content which contains the lists with their items inside them and is the place where you can see the
 dragged item, if trying to drag the item outside the board view, it doesn't show, it is only visible inside the board view.
